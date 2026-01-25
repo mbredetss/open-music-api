@@ -1,10 +1,7 @@
-import 'dotenv/config';
-import express from 'express';
+import server from './server/index.js';
 
-const app = express();
 const port = process.env.PORT;
 
-
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`server listening to http://localhost:${port}`);
 });
