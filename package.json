@@ -9,7 +9,8 @@
     "start": "node ./src/server.js",
     "start:dev": "nodemon ./src/server.js",
     "migrate": "node-pg-migrate",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src", 
+    "lint:fix": "eslint ./src --fix"
   },
   "keywords": [],
   "author": "mbredetss",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "eslint": "^9.39.2",
+    "eslint-config-dicodingacademy": "^0.9.5",
     "globals": "^17.1.0"
   }
 }
