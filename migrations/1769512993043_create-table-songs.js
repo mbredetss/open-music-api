@@ -1,7 +1,6 @@
 /**
  * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
  */
-export const shorthands = undefined;
 
 /**
  * @param pgm {import('node-pg-migrate').MigrationBuilder}
@@ -11,7 +10,7 @@ export const shorthands = undefined;
 export const up = (pgm) => {
     pgm.createTable('songs', {
         id: {
-            type: 'CHAR(22)',
+            type: 'CHAR(21)',
             primaryKey: true,
         },
         title: {
@@ -36,7 +35,8 @@ export const up = (pgm) => {
         },
         albumId: {
             type: 'CHAR(22)',
-            default: 'no album'
+            default: 'no album', 
+            references: 'albums'
         }
     });
 };

@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { pool } from '../../../db/index.js';
 import { response } from '../../../utils/index.js';
+import SongRepositories from '../repositories/song-repositories.js';
 
 export const createSongs = async (req, res) => {
   const { title, year, genre, performer, duration, albumId } = req.body;
@@ -33,14 +34,9 @@ export const getSongs = async (req, res) => {
   const { title, performer } = req.query;
 
   if (id) {
-    const result = await pool.query(
-      `SELECT * FROM songs
-            WHERE id=$1`, [id]
-    );
+    const song = await SongRepositories.getSongById(id);
 
-    if (result.rowCount > 0) {
-      const song = result.rows[0];
-
+    if (song) {
       return response(res, 200, null, { song });
     }
 

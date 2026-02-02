@@ -40,7 +40,7 @@ export const getAlbumById = async (req, res) => {
     );
 
     if (result.rowCount) {
-      const { id, name, year } = result.rows[0];
+      const { name, year } = result.rows[0];
 
       const songs = result.rows.map((song) => ({
         id: song.songsId,
@@ -49,7 +49,7 @@ export const getAlbumById = async (req, res) => {
       }));
 
       const album = {
-        id,
+        id: result.rows[0].albumId,
         name,
         year,
         songs
