@@ -4,7 +4,7 @@ import songs from '../services/songs/routes/index.js';
 import users from '../services/users/routes/index.js';
 import authentications from '../services/authentications/routes/index.js';
 import playlists from '../services/playlists/routes/index.js';
-import collaorations from '../services/collaborations/routes/index.js';
+import collaborations from '../services/collaborations/routes/index.js';
 
 const router = express.Router();
 
@@ -13,6 +13,6 @@ router.use('/songs', songs);
 router.use('/users', users);
 router.use('/authentications', authentications);
 router.use('/playlists', playlists);
-router.use('/collaborations', collaorations);
+router.use('/collaborations', collaborations);
 
 export default router;
