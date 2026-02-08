@@ -9,18 +9,18 @@ export const shorthands = undefined;
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-    pgm.createTable('playlist_songs', {
-        playlist: {
-            type: 'CHAR(25)',
-            references: 'playlists',
-            onDelete: 'CASCADE'
-        },
-        songId: {
-            type: 'CHAR(21)',
-            references: 'songs',
-            onDelete: 'CASCADE'
-        }
-    });
+  pgm.createTable('playlist_songs', {
+    playlist: {
+      type: 'CHAR(25)',
+      references: 'playlists',
+      onDelete: 'CASCADE'
+    },
+    songId: {
+      type: 'CHAR(21)',
+      references: 'songs',
+      onDelete: 'CASCADE'
+    }
+  });
 };
 
 /**
@@ -29,5 +29,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-    pgm.dropTable('playlist_songs');
+  pgm.dropTable('playlist_songs');
 };

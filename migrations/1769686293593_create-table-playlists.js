@@ -8,21 +8,21 @@
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-    pgm.createTable('playlists', {
-        id: {
-            type: 'CHAR(25)', 
-            primaryKey: true
-        }, 
-        name: {
-            type: 'VARCHAR(100)', 
-            notNull: true, 
-        }, 
-        owner: {
-            type: 'CHAR(21)', 
-            references: 'users', 
-            notNull: true
-        }
-    });
+  pgm.createTable('playlists', {
+    id: {
+      type: 'CHAR(25)',
+      primaryKey: true
+    },
+    name: {
+      type: 'VARCHAR(100)',
+      notNull: true,
+    },
+    owner: {
+      type: 'CHAR(21)',
+      references: 'users',
+      notNull: true
+    }
+  });
 };
 
 /**
@@ -31,5 +31,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-    pgm.dropTable('playlists');
+  pgm.dropTable('playlists');
 };

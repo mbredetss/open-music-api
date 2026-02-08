@@ -8,12 +8,12 @@
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-    pgm.createTable('authentications', {
-        token: {
-            type: 'TEXT',
-            primaryKey: true, 
-        },
-    });
+  pgm.createTable('authentications', {
+    token: {
+      type: 'TEXT',
+      primaryKey: true,
+    },
+  });
 };
 
 /**
@@ -22,5 +22,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-    pgm.dropTable('authentications');
- };
+  pgm.dropTable('authentications');
+};
