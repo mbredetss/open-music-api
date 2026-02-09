@@ -60,12 +60,13 @@ export const getAlbumById = async (req, res) => {
       });
     }
 
-    const { id, name, year } = album.rows[0];
+    const { id, name, year, coverUrl } = album.rows[0];
     const albums = {
       id,
       name,
       year,
-      songs: []
+      coverUrl,
+      songs: [],
     };
 
     return response(res, 200, null, {

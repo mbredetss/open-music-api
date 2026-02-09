@@ -20,6 +20,9 @@ export const up = (pgm) => {
     year: {
       type: 'SMALLINT',
       notNull: true,
+    }, 
+    coverUrl: {
+      type: 'VARCHAR(100)'
     }
   });
 };
