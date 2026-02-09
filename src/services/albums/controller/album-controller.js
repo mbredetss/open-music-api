@@ -25,11 +25,11 @@ export const createAlbum = async (req, res) => {
 export const getAlbumById = async (req, res) => {
   const albumId = req.params.id;
 
-  const result = await pool.query(
-    'SELECT id FROM albums WHERE id = $1', [albumId]
+  const album = await pool.query(
+    'SELECT * FROM albums WHERE id = $1', [albumId]
   );
 
-  const isIdAlbumContain = result.rowCount > 0;
+  const isIdAlbumContain = album.rowCount > 0;
 
   if (isIdAlbumContain) {
     const result = await pool.query(
@@ -60,12 +60,7 @@ export const getAlbumById = async (req, res) => {
       });
     }
 
-    const getAlbum = await pool.query(
-      `SELECT *
-            FROM albums
-            WHERE id = $1`, [albumId]
-    );
-    const { id, name, year } = getAlbum.rows[0];
+    const { id, name, year } = album.rows[0];
     const albums = {
       id,
       name,
