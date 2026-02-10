@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { pool } from '../../../db/index.js';
 import { response } from '../../../utils/index.js';
+import albumRepositories from '../repositories/album-repositories.js';
 
 export const createAlbum = async (req, res) => {
   const { name, year } = req.body;
@@ -110,3 +111,40 @@ export const deleteAlbum = async (req, res) => {
 
   return response(res, 404, 'Album tidak ditemukan!', null);
 };
+
+export const albumLike = async (req, res) => {
+  const userId = req.user.id;
+  const id = req.params.id;
+
+  try {
+    await albumRepositories.albumLike(userId, id);
+    return response(res, 201, 'Berhasil menyukai album', null);
+  } catch (e) {
+    console.error(e);
+    if (e.code === '23505') {
+      return response(res, 400, 'Anda sudah menyukai album ini');
+    }
+    return response(res, 404, 'Album tidak ditemukan', null);
+  }
+}
+
+export const cancelAlbumLike = async (req, res) => {
+  const userId = req.user.id;
+  const id = req.params.id;
+
+  const result = await albumRepositories.cancelAlbumLike(userId, id);
+
+  if (result > 0) {
+    return response(res, 200, 'Menyukai album telah dibatalkan', null);
+  }
+
+  return response(res, 400, 'Anda belum menyukai album ini', null);
+}
+
+export const getAlbumLike = async (req, res) => {
+  const id = req.params.id;
+
+  const likes = await albumRepositories.getAlbumLike(id);
+
+  return response(res, 200, null, { likes: parseInt(likes) });
+}

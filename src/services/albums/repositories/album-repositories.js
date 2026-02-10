@@ -15,6 +15,31 @@ class AlbumRepositories {
 
         return result.rowCount;
     }
+
+    async albumLike(userId, id) {
+        await this.pool.query(
+            `INSERT INTO user_album_likes
+            VALUES($1, $2)
+            RETURNING album_id`, [userId, id]
+        );
+    }
+
+    async cancelAlbumLike(userId, id) {
+        const result = await this.pool.query(
+            `DELETE FROM user_album_likes
+            WHERE user_id = $1 AND album_id = $2`, [userId, id]
+        );
+
+        return result.rowCount;
+    }
+
+    async getAlbumLike(id) {
+        const result = await this.pool.query(
+            `SELECT COUNT(*) as total_likes FROM user_album_likes
+            WHERE album_id = $1`, [id]
+        );
+        return result.rows[0].total_likes;
+    }
 }
 
 export default new AlbumRepositories();
