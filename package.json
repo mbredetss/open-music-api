@@ -27,7 +27,8 @@
     "newman": "^6.2.2",
     "node-pg-migrate": "^8.0.4",
     "nodemon": "^3.1.11",
-    "pg": "^8.17.2"
+    "pg": "^8.17.2",
+    "redis": "^5.10.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

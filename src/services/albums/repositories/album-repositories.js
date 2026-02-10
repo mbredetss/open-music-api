@@ -1,8 +1,10 @@
 import { Pool } from "pg";
+import CacheService from "../../../cache/redis-service.js";
 
 class AlbumRepositories {
     constructor() {
         this.pool = new Pool();
+        this.cacheService = new CacheService();
     }
 
     async updateAlbumCover(coverUrl, id) {
@@ -30,6 +32,7 @@ class AlbumRepositories {
             WHERE user_id = $1 AND album_id = $2`, [userId, id]
         );
 
+        await this.cacheService.delete(id);
         return result.rowCount;
     }
 
@@ -38,7 +41,7 @@ class AlbumRepositories {
             `SELECT COUNT(*) as total_likes FROM user_album_likes
             WHERE album_id = $1`, [id]
         );
-        return result.rows[0].total_likes;
+        return parseInt(result.rows[0].total_likes);
     }
 }
 

@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import { pool } from '../../../db/index.js';
 import { response } from '../../../utils/index.js';
 import albumRepositories from '../repositories/album-repositories.js';
+import CacheService from '../../../cache/redis-service.js';
 
 export const createAlbum = async (req, res) => {
   const { name, year } = req.body;
@@ -143,8 +144,21 @@ export const cancelAlbumLike = async (req, res) => {
 
 export const getAlbumLike = async (req, res) => {
   const id = req.params.id;
+  const cacheService = new CacheService();
 
-  const likes = await albumRepositories.getAlbumLike(id);
+  try {
+    const result = await cacheService.get(id);
+    const likes = JSON.parse(result);
 
-  return response(res, 200, null, { likes: parseInt(likes) });
+    res.set('X-Data-Source', 'cache');
+    return response(res, 200, null, likes);
+  } catch (e) {
+    const likes = await albumRepositories.getAlbumLike(id);
+
+    await cacheService.set(id, JSON.stringify({
+      likes
+    }), 1800);
+
+    return response(res, 200, null, { likes });
+  }
 }
