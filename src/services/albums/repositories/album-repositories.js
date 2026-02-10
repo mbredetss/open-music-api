@@ -24,6 +24,8 @@ class AlbumRepositories {
             VALUES($1, $2)
             RETURNING album_id`, [userId, id]
         );
+
+        await this.cacheService.delete(id);
     }
 
     async cancelAlbumLike(userId, id) {
