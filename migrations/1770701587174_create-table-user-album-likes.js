@@ -9,24 +9,24 @@ export const shorthands = undefined;
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-    pgm.createTable('user_album_likes', {
-        user_id : {
-            type: 'CHAR(21)', 
-            references: 'users', 
-        }, 
-        album_id: {
-            type: 'CHAR(22)', 
-            references: 'albums', 
-        }
-    });
+  pgm.createTable('user_album_likes', {
+    user_id : {
+      type: 'CHAR(21)',
+      references: 'users',
+    },
+    album_id: {
+      type: 'CHAR(22)',
+      references: 'albums',
+    }
+  });
 
-    pgm.createConstraint(
-        'user_album_likes',
-        'unique_user_album_likes', 
-        {
-            unique: [ 'user_id', 'album_id' ], 
-        }
-    );
+  pgm.createConstraint(
+    'user_album_likes',
+    'unique_user_album_likes',
+    {
+      unique: ['user_id', 'album_id'],
+    }
+  );
 };
 
 /**
@@ -35,5 +35,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-    pgm.dropTable('user_album_likes');
+  pgm.dropTable('user_album_likes');
 };

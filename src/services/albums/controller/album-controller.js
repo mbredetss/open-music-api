@@ -127,7 +127,7 @@ export const albumLike = async (req, res) => {
     }
     return response(res, 404, 'Album tidak ditemukan', null);
   }
-}
+};
 
 export const cancelAlbumLike = async (req, res) => {
   const userId = req.user.id;
@@ -140,7 +140,7 @@ export const cancelAlbumLike = async (req, res) => {
   }
 
   return response(res, 400, 'Anda belum menyukai album ini', null);
-}
+};
 
 export const getAlbumLike = async (req, res) => {
   const id = req.params.id;
@@ -153,6 +153,7 @@ export const getAlbumLike = async (req, res) => {
     res.set('X-Data-Source', 'cache');
     return response(res, 200, null, likes);
   } catch (e) {
+    console.error(e);
     const likes = await albumRepositories.getAlbumLike(id);
 
     await cacheService.set(id, JSON.stringify({
@@ -161,4 +162,4 @@ export const getAlbumLike = async (req, res) => {
 
     return response(res, 200, null, { likes });
   }
-}
+};
