@@ -1,22 +1,15 @@
 import { nanoid } from 'nanoid';
-import { pool } from '../../../db/index.js';
 import { response } from '../../../utils/index.js';
 import albumRepositories from '../repositories/album-repositories.js';
 import CacheService from '../../../cache/redis-service.js';
 
 export const createAlbum = async (req, res) => {
   const { name, year } = req.body;
-  const id = `album-${nanoid(16)}`;
+  const albumId = `album-${nanoid(16)}`;
 
-  const result = await pool.query(
-    `INSERT INTO albums 
-            VALUES ($1, $2, $3) 
-            RETURNING id`,
-    [id, name, year]
-  );
+  const result = await albumRepositories.createAlbum(albumId, name, year);
 
   if (result.rowCount > 0) {
-    const albumId = result.rows[0].id;
     return response(res, 201, null, {
       albumId
     });
@@ -27,52 +20,40 @@ export const createAlbum = async (req, res) => {
 export const getAlbumById = async (req, res) => {
   const albumId = req.params.id;
 
-  const album = await pool.query(
-    'SELECT * FROM albums WHERE id = $1', [albumId]
-  );
+  const result = await albumRepositories.getAlbumById(albumId);
 
-  const isIdAlbumContain = album.rowCount > 0;
+  const isIdAlbumContain = result.rowCount > 0;
 
   if (isIdAlbumContain) {
-    const result = await pool.query(
-      `SELECT albums.id as "albumId", albums.name as name, albums.year as year, songs.id as "songsId", songs.title as title, songs.performer as performer 
-        FROM albums 
-        JOIN songs ON albums.id = songs."albumId" 
-        WHERE "albumId"=$1`, [albumId]
-    );
-
-    if (result.rowCount) {
-      const { name, year } = result.rows[0];
-
-      const songs = result.rows.map((song) => ({
-        id: song.songsId,
-        title: song.title,
-        performer: song.performer,
-      }));
-
-      const album = {
-        id: result.rows[0].albumId,
-        name,
-        year,
-        songs
-      };
-
-      return response(res, 200, null, {
-        album,
+    let songs;
+    // Mengecek apakah ada data lagu-lagu di album?
+    if (result.rows[0].songsId) {
+      // jika ada, songs akan berisi array yang didalamnya ada objek lagu (id, title performer)
+      songs = result.rows.map((song) => {
+        const { title, performer } = song;
+        return {
+          id: song.songsId,
+          title,
+          performer,
+        }
       });
+    } else {
+      // jika tidak ada, songs akan berisi array kosong
+      songs = [];
     }
 
-    const { id, name, year, coverUrl } = album.rows[0];
-    const albums = {
-      id,
+    const { name, year, coverUrl } = result.rows[0];
+
+    const album = {
+      id: albumId,
       name,
       year,
       coverUrl,
-      songs: [],
+      songs
     };
 
     return response(res, 200, null, {
-      album: albums
+      album,
     });
   }
 
@@ -80,16 +61,10 @@ export const getAlbumById = async (req, res) => {
 };
 
 export const updateAlbum = async (req, res) => {
-  const id = req.params.id;
+  const albumId = req.params.id;
   const { name, year } = req.body;
 
-  const result = await pool.query(
-    `UPDATE albums 
-        SET name = $1, year = $2 
-        WHERE id=$3 
-        RETURNING id`,
-    [name, year, id]
-  );
+  const result = await albumRepositories.updateAlbum(name, year, albumId);
 
   if (result.rowCount > 0) {
     return response(res, 200, 'Album berhasil diperbarui!', null);
@@ -99,12 +74,9 @@ export const updateAlbum = async (req, res) => {
 };
 
 export const deleteAlbum = async (req, res) => {
-  const id = req.params.id;
+  const albumId = req.params.id;
 
-  const result = await pool.query(
-    `DELETE FROM albums 
-        WHERE id=$1`, [id]
-  );
+  const result = await albumRepositories.deleteAlbum(albumId);
 
   if (result.rowCount > 0) {
     return response(res, 200, 'Album berhasil dihapus!', null);
@@ -115,13 +87,14 @@ export const deleteAlbum = async (req, res) => {
 
 export const albumLike = async (req, res) => {
   const userId = req.user.id;
-  const id = req.params.id;
+  const albumId = req.params.id;
+  const cacheService = new CacheService();
 
   try {
-    await albumRepositories.albumLike(userId, id);
+    await albumRepositories.albumLike(userId, albumId);
+    await cacheService.delete(albumId);
     return response(res, 201, 'Berhasil menyukai album', null);
   } catch (e) {
-    console.error(e);
     if (e.code === '23505') {
       return response(res, 400, 'Anda sudah menyukai album ini');
     }
@@ -131,11 +104,13 @@ export const albumLike = async (req, res) => {
 
 export const cancelAlbumLike = async (req, res) => {
   const userId = req.user.id;
-  const id = req.params.id;
+  const albumId = req.params.id;
+  const cacheService = new CacheService();
 
-  const result = await albumRepositories.cancelAlbumLike(userId, id);
+  const result = await albumRepositories.cancelAlbumLike(userId, albumId);
 
   if (result > 0) {
+    await cacheService.delete(albumId);
     return response(res, 200, 'Menyukai album telah dibatalkan', null);
   }
 
@@ -152,8 +127,7 @@ export const getAlbumLike = async (req, res) => {
 
     res.set('X-Data-Source', 'cache');
     return response(res, 200, null, likes);
-  } catch (e) {
-    console.error(e);
+  } catch {
     const likes = await albumRepositories.getAlbumLike(id);
 
     await cacheService.set(id, JSON.stringify({
