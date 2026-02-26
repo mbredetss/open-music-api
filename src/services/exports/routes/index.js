@@ -7,6 +7,6 @@ import { exportPlaylists } from '../controller/export-controller.js';
 
 const router = express.Router();
 
-router.post('/:id', authenticateToken, verifyPlaylistAuthor, express.json(), validate(exportsPayloadSchema), exportPlaylists);
+router.post('/:id', authenticateToken, verifyPlaylistAuthor, validate(exportsPayloadSchema), exportPlaylists);
 
 export default router;

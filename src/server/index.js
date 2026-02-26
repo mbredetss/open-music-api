@@ -4,6 +4,7 @@ import errorHandler from '../middlewares/error.js';
 
 const app = express();
 
+app.use(express.json());
 app.use(routes);
 app.use('/covers', express.static('src/services/covers/files/images'));
 app.use(errorHandler);

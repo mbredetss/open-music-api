@@ -5,10 +5,10 @@ import { createSongs, getSongs, updateSongs, deleteSongs } from '../controller/s
 
 const router = express.Router();
 
-router.post('/', express.json(), validate(songsPayloadSchema), createSongs);
+router.post('/', validate(songsPayloadSchema), createSongs);
 router.get('/:id', getSongs);
 router.get('/', validate(songsQuerySchema),  getSongs);
-router.put('/:id', express.json(), validate(songsPayloadSchema), updateSongs);
+router.put('/:id', validate(songsPayloadSchema), updateSongs);
 router.delete('/:id', deleteSongs);
 
 export default router;

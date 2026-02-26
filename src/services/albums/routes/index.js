@@ -8,9 +8,9 @@ import authenticateToken from '../../../middlewares/auth.js';
 
 const router = express.Router();
 
-router.post('/', express.json(), validate(albumPayloadSchema), createAlbum);
+router.post('/', validate(albumPayloadSchema), createAlbum);
 router.get('/:id', getAlbumById);
-router.put('/:id', express.json(), validate(albumPayloadSchema), updateAlbum);
+router.put('/:id', validate(albumPayloadSchema), updateAlbum);
 router.delete('/:id', deleteAlbum);
 router.post('/:id/covers', upload.single('cover'), uploadCoverImages);
 router.post('/:id/likes', authenticateToken, albumLike);

@@ -5,6 +5,6 @@ import { userPayloadSchema } from '../validator/schema.js';
 
 const router = express.Router();
 
-router.post('/', express.json(), validate(userPayloadSchema), createUser);
+router.post('/', validate(userPayloadSchema), createUser);
 
 export default router;

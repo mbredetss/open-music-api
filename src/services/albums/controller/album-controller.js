@@ -35,7 +35,7 @@ export const getAlbumById = async (req, res) => {
           id: song.songsId,
           title,
           performer,
-        }
+        };
       });
     } else {
       // jika tidak ada, songs akan berisi array kosong

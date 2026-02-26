@@ -7,7 +7,7 @@ import { collaborationPayloadSchema } from '../schema/schema.js';
 
 const router = express.Router();
 
-router.post('/', authenticateToken, express.json(), validate(collaborationPayloadSchema), verifyPlaylistAuthor, addCollaborator);
-router.delete('/', authenticateToken, express.json(), validate(collaborationPayloadSchema), verifyPlaylistAuthor, deleteCollaborator);
+router.post('/', authenticateToken, validate(collaborationPayloadSchema), verifyPlaylistAuthor, addCollaborator);
+router.delete('/', authenticateToken, validate(collaborationPayloadSchema), verifyPlaylistAuthor, deleteCollaborator);
 
 export default router;
