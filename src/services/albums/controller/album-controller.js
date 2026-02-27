@@ -4,7 +4,7 @@ import albumRepositories from '../repositories/album-repositories.js';
 import CacheService from '../../../cache/redis-service.js';
 
 export const createAlbum = async (req, res) => {
-  const { name, year } = req.body;
+  const { name, year } = req.validated;
   const albumId = `album-${nanoid(16)}`;
 
   const result = await albumRepositories.createAlbum(albumId, name, year);
@@ -62,7 +62,7 @@ export const getAlbumById = async (req, res) => {
 
 export const updateAlbum = async (req, res) => {
   const albumId = req.params.id;
-  const { name, year } = req.body;
+  const { name, year } = req.validated;
 
   const result = await albumRepositories.updateAlbum(name, year, albumId);
 

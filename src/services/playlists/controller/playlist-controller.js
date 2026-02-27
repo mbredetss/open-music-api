@@ -3,7 +3,7 @@ import { response } from '../../../utils/index.js';
 import playlistRepositories from '../repositories/playlist-repositories.js';
 
 export const addPlaylist = async (req, res) => {
-  const name = req.body.name;
+  const name = req.validated.name;
   const userId = req.user.id;
   const playlistId = `playlist-${nanoid(16)}`;
 
@@ -39,7 +39,7 @@ export const deletePlaylist = async (req, res) => {
 
 export const addSongToPlaylist = async (req, res) => {
   const playlistId = req.params.id;
-  const songId = req.body.songId;
+  const songId = req.validated.songId;
   const userId = req.user.id;
   try {
     await playlistRepositories.addSongToPlaylist(playlistId, songId, userId);
@@ -77,7 +77,7 @@ export const getSongInPlaylist = async (req, res) => {
 
 export const deleteSongInPlaylist = async (req, res) => {
   const playlistId = req.params.id;
-  const songId = req.body.songId;
+  const songId = req.validated.songId;
 
   const playlist = await playlistRepositories.getPlaylistNameById(playlistId);
   const playlistName = playlist.name;

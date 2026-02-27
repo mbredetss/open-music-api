@@ -3,7 +3,7 @@ import { response } from '../../../utils/index.js';
 import collaborationRepositories from '../repositories/collaboration-repositories.js';
 
 export const addCollaborator = async (req, res) => {
-  const { playlistId, userId } = req.body;
+  const { playlistId, userId } = req.validated;
   const id = `collab_id${nanoid(16)}`;
 
   try {
@@ -17,7 +17,7 @@ export const addCollaborator = async (req, res) => {
 };
 
 export const deleteCollaborator = async (req, res) => {
-  const { playlistId, userId } = req.body;
+  const { playlistId, userId } = req.validated;
   const result = await collaborationRepositories.deleteCollaborator(playlistId, userId);
 
   if (result) {

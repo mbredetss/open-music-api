@@ -5,7 +5,7 @@ import userRepositories from '../../users/repositories/user-repositories.js';
 import authenticationRepositories from '../repositories/authentication-repositories.js';
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.validated;
 
   const user = await userRepositories.verifyUserCredential(username);
 
@@ -31,7 +31,7 @@ export const login = async (req, res) => {
 };
 
 export const newAccessToken = async (req, res) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.validated.refreshToken;
 
   const isRefreshTokenValid = await authenticationRepositories.verifiyRefreshToken(refreshToken);
 
@@ -51,7 +51,7 @@ export const newAccessToken = async (req, res) => {
 };
 
 export const deleteRefreshAccessToken = async (req, res) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.validated.refreshToken;
 
   const isRefreshTokenValid = await authenticationRepositories.verifiyRefreshToken(refreshToken);
 

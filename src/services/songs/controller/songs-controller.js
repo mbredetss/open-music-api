@@ -4,7 +4,7 @@ import { response } from '../../../utils/index.js';
 import SongRepositories from '../repositories/song-repositories.js';
 
 export const createSongs = async (req, res) => {
-  const { title, year, genre, performer, duration, albumId } = req.body;
+  const { title, year, genre, performer, duration, albumId } = req.validated;
   const id = `song-${nanoid(16)}`;
 
   const result = await pool.query(
@@ -31,7 +31,7 @@ export const createSongs = async (req, res) => {
 
 export const getSongs = async (req, res) => {
   const id = req.params.id;
-  const { title, performer } = req.query;
+  const { title, performer } = req.validated;
 
   if (id) {
     const song = await SongRepositories.getSongById(id);
@@ -81,7 +81,7 @@ export const getSongs = async (req, res) => {
 };
 
 export const updateSongs = async (req, res) => {
-  const { title, year, genre, performer, duration, albumId } = req.body;
+  const { title, year, genre, performer, duration, albumId } = req.validated;
   const id = req.params.id;
 
   const result = await pool.query(

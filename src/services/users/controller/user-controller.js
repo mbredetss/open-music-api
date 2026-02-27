@@ -2,7 +2,7 @@ import { response } from '../../../utils/index.js';
 import userRepositories from '../repositories/user-repositories.js';
 
 export const createUser = async (req, res) => {
-  const { username, password, fullname } = req.body;
+  const { username, password, fullname } = req.validated;
 
   const isUsernameExist = await userRepositories.verifyNewUsername(username);
 

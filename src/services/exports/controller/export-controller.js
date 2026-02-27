@@ -2,7 +2,7 @@ import { response } from '../../../utils/index.js';
 import ExportService from '../producers/export-service.js';
 
 export const exportPlaylists = async (req, res) => {
-  const { targetEmail } = req.body;
+  const { targetEmail } = req.validated;
   const playlistId = req.params.id;
 
   const message = {
