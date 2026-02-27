@@ -8,8 +8,3 @@ export const songsPayloadSchema = Joi.object({
   duration: Joi.number(),
   albumId: Joi.string(),
 });
-
-export const songsQuerySchema = Joi.object({
-  title: Joi.string(),
-  performer: Joi.string()
-});

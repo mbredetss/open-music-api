@@ -31,7 +31,7 @@ export const createSongs = async (req, res) => {
 
 export const getSongs = async (req, res) => {
   const id = req.params.id;
-  const { title, performer } = req.validated;
+  const { title, performer } = req.query;
 
   if (id) {
     const song = await SongRepositories.getSongById(id);
