@@ -10,9 +10,8 @@ export const addCollaborator = async (req, res) => {
     await collaborationRepositories.addCollaborator(id, userId, playlistId);
 
     return response(res, 201, null, { collaborationId: id });
-  } catch (e) {
-    console.log(e);
-    return response(res, 404, 'Kolaborator gagal di tambahkan!');
+  } catch {
+    return response(res, 404, 'Kolaborator gagal di tambahkan!', null);
   }
 };
 
