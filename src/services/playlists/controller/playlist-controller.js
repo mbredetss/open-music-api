@@ -27,8 +27,6 @@ export const deletePlaylist = async (req, res) => {
   if (playlist) {
     return response(res, 200, 'Playlist berhasil dihapus!', null);
   }
-
-  return response(res, 404, 'Playlist tidak ditemukan!', null);
 };
 
 export const addSongToPlaylist = async (req, res) => {
