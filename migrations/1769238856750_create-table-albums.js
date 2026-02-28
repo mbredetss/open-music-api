@@ -15,11 +15,13 @@ export const up = (pgm) => {
     },
     name: {
       type: 'VARCHAR(100)',
-      notNull: true,
+      notNull: true, 
+      check: 'length(trim(name)) > 0', 
     },
     year: {
       type: 'SMALLINT',
-      notNull: true,
+      notNull: true, 
+      check: `year BETWEEN 1900 and ${new Date().getFullYear()}`
     },
     coverUrl: {
       type: 'VARCHAR(100)'
