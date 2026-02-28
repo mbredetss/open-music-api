@@ -41,8 +41,7 @@ export const newAccessToken = async (req, res) => {
       const accessToken = TokenManager.generateAccessToken({ id });
 
       return response(res, 200, null, { accessToken });
-    } catch (e) {
-      console.log(e);
+    } catch {
       return response(res, 400, 'Refresh token tidak valid');
     }
   }
@@ -53,7 +52,7 @@ export const newAccessToken = async (req, res) => {
 export const deleteRefreshAccessToken = async (req, res) => {
   const refreshToken = req.validated.refreshToken;
 
-  const isRefreshTokenValid = await authenticationRepositories.verifiyRefreshToken(refreshToken);
+  const isRefreshTokenValid = await authenticationRepositories.verifyRefreshToken(refreshToken);
 
   if (isRefreshTokenValid) {
     await authenticationRepositories.deleteRefreshToken(refreshToken);
