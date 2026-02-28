@@ -20,44 +20,13 @@ export const createAlbum = async (req, res) => {
 export const getAlbumById = async (req, res) => {
   const albumId = req.params.id;
 
-  const result = await albumRepositories.getAlbumById(albumId);
+  const album = await albumRepositories.getAlbumById(albumId);
 
-  const isIdAlbumContain = result.rowCount > 0;
+  if (!album) return response(res, 404, 'Album tidak ditemukan!', null);
 
-  if (isIdAlbumContain) {
-    let songs;
-    // Mengecek apakah ada data lagu-lagu di album?
-    if (result.rows[0].songsId) {
-      // jika ada, songs akan berisi array yang didalamnya ada objek lagu (id, title performer)
-      songs = result.rows.map((song) => {
-        const { title, performer } = song;
-        return {
-          id: song.songsId,
-          title,
-          performer,
-        };
-      });
-    } else {
-      // jika tidak ada, songs akan berisi array kosong
-      songs = [];
-    }
-
-    const { name, year, coverUrl } = result.rows[0];
-
-    const album = {
-      id: albumId,
-      name,
-      year,
-      coverUrl,
-      songs
-    };
-
-    return response(res, 200, null, {
-      album,
-    });
-  }
-
-  return response(res, 404, 'Album tidak ditemukan!', null);
+  return response(res, 200, null, {
+    album,
+  });
 };
 
 export const updateAlbum = async (req, res) => {

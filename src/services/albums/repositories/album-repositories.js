@@ -17,12 +17,33 @@ class AlbumRepositories {
   }
 
   async getAlbumById(id) {
-    return await this.pool.query(
+    const result = await this.pool.query(
       `SELECT albums.id as "albumId", albums.name as name, albums.year as year, "coverUrl", songs.id as "songsId", songs.title as title, songs.performer as performer 
       FROM albums 
       LEFT JOIN songs ON albums.id = songs."albumId" 
       WHERE albums.id = $1`, [id]
     );
+
+    if (result.rowCount == 0) return null;
+
+    const { albumId, name, year, coverUrl, songsId } = result.rows[0];
+
+    const album = {
+      id: albumId,
+      name,
+      year,
+      coverUrl,
+      songs: songsId ? result.rows.map((row) => {
+        const { title, performer } = row;
+        return {
+          id: row.songsId,
+          title,
+          performer,
+        };
+      }) : []
+    };
+
+    return album;
   }
 
   async updateAlbum(name, year, id) {
