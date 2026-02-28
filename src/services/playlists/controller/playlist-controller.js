@@ -14,13 +14,7 @@ export const addPlaylist = async (req, res) => {
 
 export const getPlaylist = async (req, res) => {
   const userId = req.user.id;
-  const playlistResults = await playlistRepositories.getPlaylist(userId);
-
-  const playlists = playlistResults.map((res) => ({
-    id: res.id,
-    name: res.name,
-    username: res.username
-  }));
+  const playlists = await playlistRepositories.getPlaylist(userId);
 
   return response(res, 200, null, { playlists });
 
@@ -34,7 +28,7 @@ export const deletePlaylist = async (req, res) => {
     return response(res, 200, 'Playlist berhasil dihapus!', null);
   }
 
-  return response(res, 404, 'Playlist gagal dihapus!', null);
+  return response(res, 404, 'Playlist tidak ditemukan!', null);
 };
 
 export const addSongToPlaylist = async (req, res) => {

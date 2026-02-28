@@ -15,12 +15,16 @@ class PlaylistRepositories {
   async getPlaylist(userId) {
     const result = await this.pool.query(
       `SELECT p.id, name, username FROM playlists as p
-            LEFT JOIN collaborations ON p.id = playlist_id
-            JOIN users as u ON u.id = owner
-            WHERE user_id = $1 OR owner = $1`, [userId]
+      LEFT JOIN collaborations ON p.id = playlist_id
+      JOIN users as u ON u.id = owner
+      WHERE user_id = $1 OR owner = $1`, [userId]
     );
 
-    return result.rows;
+    return result.rows.map((res) => ({
+      id: res.id,
+      name: res.name,
+      username: res.username
+    }));;
   }
 
   async deletePlaylist(id) {
