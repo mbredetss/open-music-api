@@ -20,6 +20,10 @@ export const up = (pgm) => {
       references: 'songs',
       onDelete: 'CASCADE'
     }
+  }, {
+    constraints: {
+      primaryKey: ['playlist', 'songId'], 
+    }
   });
 };
 
