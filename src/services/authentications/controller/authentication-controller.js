@@ -33,7 +33,7 @@ export const login = async (req, res) => {
 export const newAccessToken = async (req, res) => {
   const refreshToken = req.validated.refreshToken;
 
-  const isRefreshTokenValid = await authenticationRepositories.verifiyRefreshToken(refreshToken);
+  const isRefreshTokenValid = await authenticationRepositories.verifyRefreshToken(refreshToken);
 
   if (isRefreshTokenValid) {
     try {

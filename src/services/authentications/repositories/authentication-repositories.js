@@ -18,7 +18,7 @@ class AuthenticationRepositories {
     );
   }
 
-  async verifiyRefreshToken(token) {
+  async verifyRefreshToken(token) {
     const result = await this.pool.query(
       `SELECT token FROM authentications
             WHERE token = $1`, [token]
