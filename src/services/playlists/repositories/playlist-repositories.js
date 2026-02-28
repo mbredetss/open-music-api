@@ -8,7 +8,7 @@ class PlaylistRepositories {
   async addPlaylist(id, name, userId) {
     await this.pool.query(
       `INSERT INTO playlists
-            VALUES($1, $2, $3) RETURNING id`, [id, name, userId]
+      VALUES($1, $2, $3)`, [id, name, userId]
     );
   }
 
