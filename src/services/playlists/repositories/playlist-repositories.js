@@ -33,7 +33,7 @@ class PlaylistRepositories {
       WHERE id = $1 AND (owner = $2 OR EXISTS(
       SELECT 1 FROM collaborations WHERE playlist_id = $1 AND user_id = $2))`, [id, userId]
     );
-    
+
     return result.rowCount > 0;
   }
 
@@ -107,7 +107,11 @@ class PlaylistRepositories {
             WHERE p.id = $1`, [id]
     );
 
-    return result.rows;
+    return result.rows.map((res) => ({
+      id: res.song_id,
+      title: res.title,
+      performer: res.performer
+    }));
   }
 
   async deleteSongInPlaylist(id, songId, userId) {
