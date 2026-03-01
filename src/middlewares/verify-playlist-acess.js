@@ -11,9 +11,9 @@ export const verifyPlaylistAccess = async (req, res, next) => {
     return response(res, 404, 'Playlist tidak ditemukan', null);
   }
 
-  const result = await playlistRepositories.getPlaylist(userId);
+  const isUserHasAccess = await playlistRepositories.verifyPlaylistAccess(playlistId, userId);
 
-  if (result.length > 0) {
+  if (isUserHasAccess) {
     return next();
   }
 
