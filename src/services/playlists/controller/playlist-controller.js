@@ -48,20 +48,7 @@ export const addSongToPlaylist = async (req, res) => {
 export const getSongInPlaylist = async (req, res) => {
   const playlistId = req.params.id;
 
-  const result = await playlistRepositories.getSongInPlaylist(playlistId);
-  const songs = result.map((res) => ({
-    id: res.song_id,
-    title: res.title,
-    performer: res.performer
-  }));
-
-  const { id, name, username } = result[0];
-  const playlist = {
-    id,
-    name,
-    username,
-    songs
-  };
+  const playlist = await playlistRepositories.getSongInPlaylist(playlistId);
 
   return response(res, 200, null, { playlist });
 };

@@ -101,17 +101,24 @@ class PlaylistRepositories {
     const result = await this.pool.query(
       `SELECT p.id, name, s.id as song_id, title, performer, username 
             FROM playlists as p
-            JOIN playlist_songs ON playlist = p.id
-            JOIN songs as s ON "songId" = s.id
+            LEFT JOIN playlist_songs ON playlist = p.id
+            LEFT JOIN songs as s ON "songId" = s.id
             JOIN users ON users.id = owner
             WHERE p.id = $1`, [id]
     );
 
-    return result.rows.map((res) => ({
-      id: res.song_id,
-      title: res.title,
-      performer: res.performer
-    }));
+    const { name, username, song_id, title, performer } = result.rows[0];
+    
+    return {
+      id,
+      name,
+      username,
+      songs: song_id || title || performer ? result.rows.map((res) => ({
+        id: res.song_id,
+        title: res.title,
+        performer: res.performer
+      })) : [], 
+    };;
   }
 
   async deleteSongInPlaylist(id, songId, userId) {
