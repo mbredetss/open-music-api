@@ -4,7 +4,7 @@ import authenticateToken from '../../../middlewares/auth.js';
 import validate from '../../../middlewares/validate.js';
 import { playlistNamePayloadSchema, songIdPayloadSchema } from '../validator/schema.js';
 import { verifyPlaylistAuthor } from '../../../middlewares/verify-author.js';
-import { verifyPlaylistAccess } from '../../../middlewares/verify-playlist-acess.js';
+import { verifyPlaylistAccess } from '../../../middlewares/verify-playlist-access.js';
 
 const router = express.Router();
 
