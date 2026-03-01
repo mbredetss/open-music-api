@@ -30,10 +30,10 @@ class PlaylistRepositories {
   async verifyPlaylistAccess(id, userId) {
     const result = await this.pool.query(
       `SELECT 1 FROM playlists
-      WHERE owner = $1 OR EXISTS(
-      SELECT 1 FROM collaborations WHERE playlist_id = $1 AND user_id = $2)`, [id, userId]
+      WHERE id = $1 AND (owner = $2 OR EXISTS(
+      SELECT 1 FROM collaborations WHERE playlist_id = $1 AND user_id = $2))`, [id, userId]
     );
-
+    console.log(result.rows);
     return result.rowCount > 0;
   }
 
