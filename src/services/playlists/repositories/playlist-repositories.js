@@ -33,7 +33,7 @@ class PlaylistRepositories {
       WHERE id = $1 AND (owner = $2 OR EXISTS(
       SELECT 1 FROM collaborations WHERE playlist_id = $1 AND user_id = $2))`, [id, userId]
     );
-    console.log(result.rows);
+    
     return result.rowCount > 0;
   }
 
