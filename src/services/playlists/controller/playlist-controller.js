@@ -39,9 +39,8 @@ export const addSongToPlaylist = async (req, res) => {
     const playlistName = (await playlistRepositories.getPlaylistNameById(playlistId))[0];
 
     return response(res, 201, `Lagu berhasil di tambahkan ke playlist '${playlistName.name}'`);
-  } catch (e) {
-    console.log(e);
-    return response(res, 404, 'Lagu gagal ditambahkan!');
+  } catch {
+    return response(res, 404, 'Lagu tidak ditemukan!');
   }
 
 };
