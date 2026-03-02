@@ -24,7 +24,7 @@ class PlaylistRepositories {
       id: res.id,
       name: res.name,
       username: res.username
-    }));;
+    }));
   }
 
   async verifyPlaylistAccess(id, userId) {
@@ -108,7 +108,7 @@ class PlaylistRepositories {
     );
 
     const { name, username, song_id, title, performer } = result.rows[0];
-    
+
     return {
       id,
       name,
@@ -117,8 +117,8 @@ class PlaylistRepositories {
         id: res.song_id,
         title: res.title,
         performer: res.performer
-      })) : [], 
-    };;
+      })) : [],
+    };
   }
 
   async deleteSongInPlaylist(id, songId, userId) {
@@ -129,19 +129,25 @@ class PlaylistRepositories {
 
       const result = await client.query(
         `DELETE FROM playlist_songs
-                WHERE playlist = $1 AND "songId" = $2 
-                RETURNING playlist`, [id, songId]
+        WHERE playlist = $1 AND "songId" = $2 
+        RETURNING playlist`, [id, songId]
       );
 
-      const time = new Date().toISOString();
-      await client.query(
-        `INSERT INTO activities
-                VALUES($1, $2, $3, $4, $5)`, ['delete', time, id, userId, songId]
-      );
+      const isDeleteSuccess = result.rowCount > 0;
 
-      await client.query('COMMIT');
+      if (isDeleteSuccess) {
+        const time = new Date().toISOString();
+        await client.query(
+          `INSERT INTO activities
+          VALUES($1, $2, $3, $4, $5)`, ['delete', time, id, userId, songId]
+        );
 
-      return result.rows[0];
+        await client.query('COMMIT');
+        return isDeleteSuccess;
+      }
+
+      await client.query('ROLLBACK');
+      return isDeleteSuccess;
     } catch (e) {
       await client.query('ROLLBACK');
       throw e;

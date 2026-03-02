@@ -11,9 +11,9 @@ const router = express.Router();
 router.post('/', authenticateToken, validate(playlistNamePayloadSchema), addPlaylist);
 router.get('/', authenticateToken, getPlaylist);
 router.delete('/:id', authenticateToken, verifyPlaylistAuthor, deletePlaylist);
-router.post('/:id/songs', authenticateToken, validate(songIdPayloadSchema), verifyPlaylistAccess, addSongToPlaylist);
+router.post('/:id/songs', authenticateToken, verifyPlaylistAccess, validate(songIdPayloadSchema), addSongToPlaylist);
 router.get('/:id/songs', authenticateToken, verifyPlaylistAccess, getSongInPlaylist);
-router.delete('/:id/songs', authenticateToken, validate(songIdPayloadSchema), verifyPlaylistAccess, deleteSongInPlaylist);
+router.delete('/:id/songs', authenticateToken, verifyPlaylistAccess, validate(songIdPayloadSchema), deleteSongInPlaylist);
 router.get('/:id/activities', authenticateToken, verifyPlaylistAccess, getPlaylistActivity);
 
 export default router;

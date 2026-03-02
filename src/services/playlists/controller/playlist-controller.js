@@ -57,15 +57,17 @@ export const deleteSongInPlaylist = async (req, res) => {
   const playlistId = req.params.id;
   const songId = req.validated.songId;
 
-  const playlist = await playlistRepositories.getPlaylistNameById(playlistId);
-  const playlistName = playlist.name;
   const userId = req.user.id;
 
   try {
     const result = await playlistRepositories.deleteSongInPlaylist(playlistId, songId, userId);
     if (result) {
+      const playlist = await playlistRepositories.getPlaylistNameById(playlistId);
+      const playlistName = playlist[0].name;
       return response(res, 200, `Lagu berhasil di hapus dari playlist '${playlistName}'`);
     }
+
+    return response(res, 404, 'Lagu gagal dihapus! Lagu tidak ditemukan');
   } catch (e) {
     console.log(e);
     return response(res, 400, 'Lagu gagal dihapus dari playlist!');
